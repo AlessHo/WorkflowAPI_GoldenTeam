@@ -57,7 +57,7 @@ public class GetUsers extends HttpServlet {
             Connection connection = DriverManager.getConnection(url);
 
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("Select user_id,user_name,user_mail,date_of_birth from wf_accounts;");
+            ResultSet resultSet = statement.executeQuery("Select user_id,user_name,user_mail from wf_accounts;");
            
             JSONObject json      = new JSONObject();
             JSONArray  UsersList = new JSONArray();
@@ -70,7 +70,7 @@ public class GetUsers extends HttpServlet {
                 user.put("UserID" , resultSet.getString(1));
                 user.put("UserName" , resultSet.getString(2));
                 user.put("UserMail" , resultSet.getString(3));
-                user.put("UserDateOfBirth" , resultSet.getString(4));
+                //user.put("UserDateOfBirth" , resultSet.getString(4));
                 
                 UsersList.put(user);
                 
@@ -102,5 +102,4 @@ public class GetUsers extends HttpServlet {
         }  
         return map;  
     } 
-
 }

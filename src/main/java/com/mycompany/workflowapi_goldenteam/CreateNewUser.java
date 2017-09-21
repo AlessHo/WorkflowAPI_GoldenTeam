@@ -31,13 +31,10 @@ public class CreateNewUser extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        
+
+        PrintWriter out = resp.getWriter();
         Properties prop = new Properties();
         prop.load(getServletContext().getResourceAsStream("/WEB-INF/config.properties"));
-        
-        resp.setContentType("application/javascript");
-        PrintWriter out = resp.getWriter();
-        //out.println("Dear vistor, you are accessing my first project deployed on cloud. Thank you");
 
         String url = "";                  
                 
@@ -63,19 +60,11 @@ public class CreateNewUser extends HttpServlet {
             if (UserBirthDate == null){
                 throw new Exception("UserBirthDate is null");            
             }
+          
             
-            /*out.println("UserName: "+UserName);
-             out.println("UserMail: " +UserMail);
-             out.println("UserGender:" + UserGender);
-             out.println("UserBirthDate:" + UserBirthDate);*/
-            
-             
-            // String UserBirthDate="2008-05-04";  
-            
-            if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
+           if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
 
                 Class.forName(prop.getProperty("googleDriverPath")).newInstance();
-                //url = "jdbc:google:mysql://MyFirstProject-ecd46:myinstance/WorkFlow?user=root";
                 url = prop.getProperty("prodURL");
 
             } else {
@@ -86,13 +75,8 @@ public class CreateNewUser extends HttpServlet {
             Connection connection = DriverManager.getConnection(url);
                          
             Statement statement = connection.createStatement();
-            int resultSet = statement.executeUpdate("Insert into wf_accounts(user_name,user_mail,user_gender,date_of_birth,creation_date)values('" + UserName + "','" + UserMail + "','" + UserGender + "','" + UserBirthDate + "', sysdate());");
-           // int resultSet = statement.executeUpdate("Insert into wf_accounts(user_name,user_mail,user_gender,creation_ddate)values('frou frou','frou@feou.com','U',sysdate());");
-            
-           // int resultSet = statement.executeUpdate("update wf_accounts set date_of_birh = '2008-05-04' Where user_name = 'frou frou';");
- 
-            //while (resultSet.next()) {
-                
+            int resultSet = statement.executeUpdate("Insert into wf_accounts(user_name,user_mail,user_gender,date_of_birh,creation_ddate)values('" + UserName + "','" + UserMail + "','" + UserGender + "','" + UserBirthDate + "', sysdate());");
+          
             
             JSONObject user = new JSONObject();
             user.put("result", resultSet);
@@ -102,6 +86,6 @@ public class CreateNewUser extends HttpServlet {
 
         } catch (Exception ex) {
             resp.sendError(400, ex.toString());
-        }
+        }        
     }
 }
